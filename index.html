@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeadForm — Automated Lead Engine for UK Driveway Contractors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal:        #0F4C4C;
+  --teal-mid:    #1A6363;
+  --teal-light:  #2A8080;
+  --teal-pale:   #EAF4F4;
+  --teal-faint:  #F0F8F8;
+  --accent:      #2A8080;
+  --accent-glow: rgba(42,128,128,0.12);
+
+  --white: #FFFFFF;
+  --off:   #F7F7F5;
+  --off-2: #EFEFEC;
+  --ink:   #131313;
+  --ink-2: #2C2C2C;
+  --mute:  #888880;
+  --faint: #BBBBB5;
+
+  --border:      rgba(19,19,19,0.08);
+  --border-dark: rgba(19,19,19,0.14);
+  --teal-border: rgba(15,76,76,0.15);
+
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans:  'DM Sans', system-ui, sans-serif;
+
+  --r: 12px;
+  --r-sm: 8px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--white);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── UTILITIES ── */
+.wrap { width: 100%; max-width: 680px; margin: 0 auto; padding: 0 24px; }
+.wrap-wide { width: 100%; max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+/* ── NAV ── */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.3s ease;
+}
+.nav-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+.nav-logo span { color: var(--teal-mid); }
+.nav-cta {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 8px 18px;
+  background: var(--teal);
+  color: var(--white);
+  border-radius: 100px;
+  transition: background 0.2s ease, transform 0.2s ease;
+  letter-spacing: 0.01em;
+}
+.nav-cta:hover { background: var(--teal-mid); transform: translateY(-1px); }
+
+/* ── HERO ── */
+.hero {
+  background: var(--teal);
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 100px 24px 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-grain {
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  pointer-events: none;
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+.hero-inner { position: relative; max-width: 680px; margin: 0 auto; width: 100%; }
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 100px;
+  padding: 5px 14px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 32px;
+  animation: fadeUp 0.6s ease both;
+}
+.tag-dot { width: 5px; height: 5px; background: #5DD9C4; border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;}50%{opacity:0.3;} }
+
+.hero-h1 {
+  font-family: var(--serif);
+  font-size: clamp(42px, 10vw, 72px);
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+  animation: fadeUp 0.6s ease 0.1s both;
+}
+.hero-h1 em {
+  font-style: italic;
+  color: #5DD9C4;
+}
+.hero-sub {
+  font-size: 17px;
+  color: rgba(255,255,255,0.55);
+  font-weight: 300;
+  line-height: 1.75;
+  margin-bottom: 14px;
+  max-width: 520px;
+  animation: fadeUp 0.6s ease 0.2s both;
+}
+.hero-proof {
+  font-size: 13px;
+  color: rgba(255,255,255,0.32);
+  line-height: 1.6;
+  margin-bottom: 40px;
+  max-width: 480px;
+  animation: fadeUp 0.6s ease 0.25s both;
+}
+.hero-proof strong { color: rgba(93,217,196,0.7); font-weight: 500; }
+
+.hero-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: fadeUp 0.6s ease 0.3s both;
+}
+.btn-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--white);
+  color: var(--teal);
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 16px 28px;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  letter-spacing: -0.01em;
+}
+.btn-main:hover { background: var(--teal-pale); transform: translateY(-1px); }
+.btn-ghost-teal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  padding: 16px 28px;
+  border-radius: 100px;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.15);
+  transition: all 0.2s ease;
+}
+.btn-ghost-teal:hover { border-color: rgba(255,255,255,0.35); color: rgba(255,255,255,0.9); }
+
+.hero-reassure {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 28px;
+  animation: fadeUp 0.6s ease 0.4s both;
+}
+.reassure-i {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.28);
+  font-weight: 400;
+}
+.reassure-i svg { width: 12px; height: 12px; stroke: rgba(93,217,196,0.5); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Floating notif cards */
+.hero-notifs {
+  position: absolute;
+  bottom: 40px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: fadeUp 0.8s ease 0.6s both;
+}
+.notif {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  border-radius: var(--r-sm);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 200px;
+}
+.notif-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.nd-green { background: #4ADE80; }
+.nd-teal { background: #5DD9C4; }
+.nd-yellow { background: #FCD34D; }
+.notif-body {}
+.notif-t { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.85); }
+.notif-s { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 1px; }
+
+/* ── LOGOS ── */
+.logos {
+  background: var(--off);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 24px;
+}
+.logos-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.logos-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--faint);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  margin-right: 8px;
+}
+.logo-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 5px 11px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--mute);
+  white-space: nowrap;
+}
+.logo-pill svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+/* ── STAT STRIP ── */
+.stats {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+.stats-grid {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.stat-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--border);
+}
+.stat-row:last-child { border-bottom: none; }
+.stat-num {
+  font-family: var(--serif);
+  font-size: clamp(36px, 8vw, 56px);
+  font-weight: 600;
+  color: var(--teal);
+  line-height: 1;
+  min-width: 120px;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+.stat-text {}
+.stat-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-2);
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+.stat-proof {
+  font-size: 13px;
+  color: var(--mute);
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+/* ── SECTION BASE ── */
+.section { padding: 80px 0; }
+.section-sm { padding: 56px 0; }
+.section-dark { background: var(--teal); color: var(--white); }
+.section-off { background: var(--off); }
+.section-teal-pale { background: var(--teal-faint); }
+
+.label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--teal-mid);
+  margin-bottom: 16px;
+  display: block;
+}
+.label-light { color: rgba(93,217,196,0.8); }
+
+.h2 {
+  font-family: var(--serif);
+  font-size: clamp(30px, 7vw, 48px);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+.h2-light { color: var(--white); }
+.h2 em { font-style: italic; color: var(--teal-mid); }
+.h2-light em { color: #5DD9C4; }
+
+.body-text {
+  font-size: 16px;
+  color: var(--mute);
+  font-weight: 300;
+  line-height: 1.8;
+}
+.body-text-light { color: rgba(255,255,255,0.5); }
+
+/* ── PROBLEM ── */
+.problem-card {
+  background: var(--white);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--r);
+  padding: 20px;
+  margin-bottom: 12px;
+}
+.problem-card:last-of-type { margin-bottom: 0; }
+.pc-time {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 8px;
+}
+.pc-title {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.pc-body { font-size: 13px; color: var(--mute); font-weight: 300; }
+.pc-tag {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.tag-red { background: rgba(220,38,38,0.06); color: #DC2626; border: 1px solid rgba(220,38,38,0.12); }
+.tag-teal { background: var(--accent-glow); color: var(--teal-mid); border: 1px solid rgba(42,128,128,0.2); }
+
+.loss-box {
+  background: var(--teal);
+  border-radius: var(--r);
+  padding: 24px;
+  margin-top: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.loss-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #5DD9C4, transparent);
+}
+.loss-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.38); margin-bottom: 6px; }
+.loss-num { font-family: var(--serif); font-size: 48px; font-weight: 600; color: var(--white); line-height: 1; letter-spacing: -0.02em; }
+.loss-sub { font-size: 13px; color: rgba(255,255,255,0.35); margin-top: 6px; font-weight: 300; }
+
+/* ── FEATURES ── */
+.feat-block {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--border);
+}
+.feat-block:last-child { border-bottom: none; }
+.feat-num {
+  font-family: var(--serif);
+  font-size: 56px;
+  font-weight: 600;
+  color: var(--off-2);
+  line-height: 1;
+  margin-bottom: -4px;
+  letter-spacing: -0.02em;
+}
+.feat-title {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 12px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+.feat-body { font-size: 15px; color: var(--mute); font-weight: 300; line-height: 1.8; margin-bottom: 20px; }
+
+/* Mock UI */
+.mock {
+  background: var(--teal);
+  border-radius: var(--r);
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(15,76,76,0.2);
+  margin-top: 20px;
+}
+.mock-bar {
+  background: rgba(0,0,0,0.2);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.mock-dot { width: 8px; height: 8px; border-radius: 50%; }
+.mock-body { padding: 18px; }
+.mock-field {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-family: var(--sans);
+  color: rgba(255,255,255,0.38);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.mock-field.done { border-color: rgba(93,217,196,0.25); color: rgba(255,255,255,0.8); }
+.mock-chk { color: #5DD9C4; font-size: 11px; }
+.mock-price {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid rgba(93,217,196,0.2);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  margin: 10px 0;
+}
+.mock-price-num { font-family: var(--serif); font-size: 28px; font-weight: 600; color: #5DD9C4; filter: blur(7px); user-select: none; }
+.mock-price-lbl { font-size: 11px; color: rgba(93,217,196,0.5); margin-top: 6px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
+.mock-btn { background: #5DD9C4; color: var(--teal); border: none; border-radius: 6px; padding: 12px; width: 100%; font-size: 13px; font-weight: 700; font-family: var(--sans); cursor: default; }
+
+/* Tier cards */
+.tier {
+  border: 1px solid var(--border-dark);
+  border-radius: var(--r);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.tier.featured { border-color: var(--teal-mid); }
+.tier-head {
+  padding: 18px 20px;
+  background: var(--off);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+.tier.featured .tier-head { background: var(--teal); border-bottom-color: rgba(255,255,255,0.1); }
+.tier-name { font-family: var(--serif); font-size: 17px; font-weight: 600; color: var(--ink); line-height: 1.2; }
+.tier.featured .tier-name { color: var(--white); }
+.tier-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 9px; border-radius: 100px; white-space: nowrap; background: var(--accent-glow); color: var(--teal-mid); border: 1px solid rgba(42,128,128,0.2); }
+.tier.featured .tier-tag { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.9); border-color: rgba(255,255,255,0.2); }
+.tier-body { padding: 20px; background: var(--white); }
+.tier.featured .tier-body { background: var(--teal-faint); }
+.tier-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.tier-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--ink-2); line-height: 1.5; font-weight: 400; }
+.ck { width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; font-size: 8px; font-weight: 700; }
+.ck-grey { background: var(--off-2); color: var(--mute); }
+.ck-teal { background: var(--accent-glow); color: var(--teal-mid); border: 1px solid rgba(42,128,128,0.2); }
+.tier-hi { margin-top: 14px; padding: 12px 14px; background: rgba(42,128,128,0.06); border: 1px solid rgba(42,128,128,0.15); border-radius: var(--r-sm); font-size: 13px; color: var(--teal); font-weight: 500; line-height: 1.5; }
+
+/* ── METRICS ── */
+.metrics-grid { display: flex; flex-direction: column; gap: 1px; background: var(--border); border-radius: var(--r); overflow: hidden; }
+.metric {
+  background: var(--white);
+  padding: 28px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.section-dark .metrics-grid { background: rgba(255,255,255,0.08); }
+.section-dark .metric { background: rgba(255,255,255,0.04); }
+.metric-num {
+  font-family: var(--serif);
+  font-size: clamp(32px, 8vw, 44px);
+  font-weight: 600;
+  color: var(--teal);
+  line-height: 1;
+  min-width: 100px;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+.section-dark .metric-num { color: #5DD9C4; }
+.metric-info {}
+.metric-lbl { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal-mid); margin-bottom: 4px; }
+.section-dark .metric-lbl { color: rgba(93,217,196,0.7); }
+.metric-desc { font-size: 13px; color: var(--mute); font-weight: 300; line-height: 1.5; }
+.section-dark .metric-desc { color: rgba(255,255,255,0.38); }
+
+/* ── FLOWCHART ── */
+.flow { display: flex; flex-direction: column; gap: 0; }
+.flow-item {
+  display: flex;
+  gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.flow-item:last-child { border-bottom: none; }
+.flow-left { display: flex; flex-direction: column; align-items: center; gap: 0; }
+.flow-node {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.fn-fill { background: var(--teal); }
+.fn-outline { background: transparent; border: 1.5px solid var(--border-dark); }
+.section-dark .fn-outline { border-color: rgba(255,255,255,0.15); }
+.flow-node svg { width: 18px; height: 18px; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fn-fill svg { stroke: var(--white); }
+.fn-outline svg { stroke: var(--mute); }
+.section-dark .fn-outline svg { stroke: rgba(255,255,255,0.4); }
+.flow-connector { width: 1px; flex: 1; background: var(--border); min-height: 20px; }
+.section-dark .flow-connector { background: rgba(255,255,255,0.1); }
+.flow-right { padding-top: 8px; flex: 1; }
+.flow-step-n { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal-mid); margin-bottom: 4px; }
+.section-dark .flow-step-n { color: rgba(93,217,196,0.7); }
+.flow-step-t { font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 4px; line-height: 1.2; }
+.section-dark .flow-step-t { color: var(--white); }
+.flow-step-d { font-size: 13px; color: var(--mute); font-weight: 300; line-height: 1.55; }
+.section-dark .flow-step-d { color: rgba(255,255,255,0.38); }
+.flow-outcome { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 12px; color: var(--teal-mid); font-weight: 500; }
+.section-dark .flow-outcome { color: #5DD9C4; }
+
+/* ── SCARCITY ── */
+.area-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.area-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: var(--white);
+  font-size: 14px;
+}
+.section-dark .area-row { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); }
+.area-name { font-weight: 500; color: var(--ink); }
+.section-dark .area-name { color: rgba(255,255,255,0.8); }
+.area-open { font-size: 12px; font-weight: 600; color: #22c55e; }
+.scarcity-reason { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--r-sm); padding: 16px; margin-top: 20px; font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.7; font-weight: 300; font-style: italic; }
+
+/* ── PRICING ── */
+.price-card {
+  background: var(--white);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--r);
+  overflow: hidden;
+  position: relative;
+}
+.price-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--teal), var(--teal-light)); }
+.price-top { padding: 28px 24px; border-bottom: 1px solid var(--border); }
+.price-badge { display: inline-flex; align-items: center; gap: 7px; background: var(--accent-glow); border: 1px solid rgba(42,128,128,0.2); border-radius: 100px; padding: 4px 12px; font-size: 11px; font-weight: 600; color: var(--teal-mid); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 20px; }
+.badge-dot { width: 5px; height: 5px; background: var(--teal-mid); border-radius: 50%; animation: pulse 2s infinite; }
+.price-amounts { display: flex; align-items: flex-end; gap: 14px; margin-bottom: 8px; flex-wrap: wrap; }
+.price-old { font-family: var(--serif); font-size: 24px; font-weight: 400; color: var(--faint); text-decoration: line-through; line-height: 1; }
+.price-new { font-family: var(--serif); font-size: 60px; font-weight: 600; color: var(--ink); letter-spacing: -0.03em; line-height: 0.9; }
+.price-save { display: inline-flex; align-items: center; gap: 5px; background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.18); border-radius: 100px; padding: 3px 11px; font-size: 12px; font-weight: 600; color: #16a34a; margin-bottom: 16px; }
+.price-replaces { margin-bottom: 14px; }
+.price-replaces-lbl { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); margin-bottom: 8px; }
+.replace-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.r-tag { font-size: 12px; color: var(--mute); background: var(--off); border: 1px solid var(--border); border-radius: 4px; padding: 3px 9px; font-weight: 400; }
+.price-note { font-size: 14px; color: var(--mute); line-height: 1.65; font-weight: 300; }
+.price-note strong { color: var(--teal); font-weight: 600; }
+.price-context { font-size: 13px; color: var(--faint); font-style: italic; margin-top: 6px; }
+.price-retainer { display: flex; align-items: center; gap: 12px; margin-top: 14px; padding: 12px 14px; background: var(--off); border: 1px solid var(--border); border-radius: var(--r-sm); }
+.retainer-n { font-family: var(--serif); font-size: 20px; font-weight: 600; color: var(--ink); white-space: nowrap; }
+.retainer-n small { font-size: 13px; font-weight: 400; color: var(--faint); font-family: var(--sans); }
+.retainer-d { font-size: 12px; color: var(--mute); line-height: 1.5; font-weight: 300; }
+.price-feats { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; }
+.pf { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--ink-2); line-height: 1.5; font-weight: 400; }
+.pf-ck { width: 16px; height: 16px; border-radius: 50%; background: var(--accent-glow); border: 1px solid rgba(42,128,128,0.2); display: flex; align-items: center; justify-content: center; font-size: 8px; color: var(--teal-mid); flex-shrink: 0; margin-top: 1px; font-weight: 700; }
+.price-bottom { padding: 20px 24px; display: flex; flex-direction: column; gap: 14px; }
+.price-disclaimer { font-size: 12px; color: var(--faint); line-height: 1.6; font-weight: 300; }
+.btn-teal { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--teal); color: var(--white); font-family: var(--sans); font-size: 15px; font-weight: 600; padding: 16px 24px; border-radius: 100px; text-decoration: none; transition: all 0.2s ease; letter-spacing: -0.01em; }
+.btn-teal:hover { background: var(--teal-mid); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(15,76,76,0.3); }
+.btn-outline-teal { display: flex; align-items: center; justify-content: center; gap: 8px; background: transparent; color: var(--teal); font-family: var(--sans); font-size: 15px; font-weight: 500; padding: 14px 24px; border-radius: 100px; text-decoration: none; border: 1.5px solid var(--teal-border); transition: all 0.2s ease; }
+.btn-outline-teal:hover { border-color: var(--teal); background: var(--accent-glow); }
+
+/* ── FINAL CTA ── */
+.final-cta {
+  background: var(--teal);
+  padding: 80px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.final-cta::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  pointer-events: none;
+}
+.final-inner { position: relative; max-width: 480px; margin: 0 auto; }
+.final-h { font-family: var(--serif); font-size: clamp(36px, 9vw, 56px); font-weight: 600; color: var(--white); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 16px; }
+.final-h em { font-style: italic; color: #5DD9C4; }
+.final-p { font-size: 16px; color: rgba(255,255,255,0.45); font-weight: 300; line-height: 1.75; margin-bottom: 36px; }
+.final-btns { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+.final-reassure { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+.fr-i { display: flex; align-items: center; gap: 5px; font-size: 12px; color: rgba(255,255,255,0.28); }
+.fr-i svg { width: 11px; height: 11px; stroke: rgba(93,217,196,0.5); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--ink);
+  padding: 28px 24px;
+}
+.foot-inner { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; align-items: center; text-align: center; }
+.foot-logo { font-family: var(--sans); font-weight: 600; font-size: 15px; color: rgba(255,255,255,0.6); text-decoration: none; }
+.foot-logo span { color: #5DD9C4; }
+.foot-text { font-size: 12px; color: rgba(255,255,255,0.2); font-weight: 300; }
+
+/* ── EMMA FLOAT ── */
+.emma {
+  position: fixed;
+  bottom: 20px; right: 20px;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--teal);
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  padding: 12px 18px;
+  border-radius: 100px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 8px 28px rgba(15,76,76,0.4);
+  transition: all 0.25s ease;
+  animation: fadeUp 1s ease 1s both;
+}
+.emma:hover { background: var(--teal-mid); transform: translateY(-2px); box-shadow: 0 12px 36px rgba(15,76,76,0.5); }
+.emma svg { width: 16px; height: 16px; stroke: rgba(255,255,255,0.7); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.emma-online { width: 6px; height: 6px; background: #4ADE80; border-radius: 50%; animation: pulse 2s infinite; flex-shrink: 0; }
+.emma strong { color: #5DD9C4; }
+
+/* ── DIVIDER ── */
+.divider { height: 1px; background: var(--border); }
+.divider-light { height: 1px; background: rgba(255,255,255,0.08); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);} }
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+.d1{transition-delay:0.1s;}.d2{transition-delay:0.2s;}.d3{transition-delay:0.3s;}
+.rc { opacity: 0; transform: translateY(28px); transition: opacity 0.65s cubic-bezier(0.22,1,0.36,1), transform 0.65s cubic-bezier(0.22,1,0.36,1); }
+.rc.visible { opacity: 1; transform: none; }
+.rc1{transition-delay:0.05s;}.rc2{transition-delay:0.18s;}.rc3{transition-delay:0.32s;}
+
+/* ── DESKTOP TWEAKS ── */
+@media (min-width: 640px) {
+  .hero-btns { flex-direction: row; }
+  .final-btns { flex-direction: row; justify-content: center; }
+  .hero-notifs { display: flex; }
+  .price-feats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .price-bottom { flex-direction: row; align-items: center; justify-content: space-between; }
+  .price-disclaimer { max-width: 240px; }
+  .btn-teal { width: auto; }
+}
+@media (max-width: 639px) {
+  .hero-notifs { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Lead<span>Form</span></a>
+    <a href="https://surfacex.info" class="nav-cta" target="_blank">See Demo →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grain"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-notifs">
+    <div class="notif">
+      <div class="notif-dot nd-green"></div>
+      <div class="notif-body">
+        <div class="notif-t">Lead Recovered</div>
+        <div class="notif-s">Missed call → Emma replied in 18s</div>
+      </div>
+    </div>
+    <div class="notif">
+      <div class="notif-dot nd-teal"></div>
+      <div class="notif-body">
+        <div class="notif-t">Survey Booked</div>
+        <div class="notif-s">Resin driveway — £5,400 estimate</div>
+      </div>
+    </div>
+    <div class="notif">
+      <div class="notif-dot nd-yellow"></div>
+      <div class="notif-body">
+        <div class="notif-t">5-Star Review</div>
+        <div class="notif-s">Automatically requested post-job</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-inner">
+    <div class="hero-tag">
+      <span class="tag-dot"></span>
+      UK Driveway & Resin Contractors
+    </div>
+    <h1 class="hero-h1">
+      Every missed call<br>
+      costs you <em>£4,000.</em>
+    </h1>
+    <p class="hero-sub">Your competitors are still manually chasing leads. This system replies, follows up, books jobs and collects reviews — automatically.</p>
+    <p class="hero-proof">Based on just <strong>2 missed £4,000 jobs per month</strong> — the UK average for an active driveway contractor.</p>
+    <div class="hero-btns">
+      <a href="https://surfacex.info" class="btn-main" target="_blank">See The System Live →</a>
+      <a href="https://wa.link/rw16n1" class="btn-ghost-teal" target="_blank">Chat with Emma</a>
+    </div>
+    <div class="hero-reassure">
+      <div class="reassure-i"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>15-min walkthrough</div>
+      <div class="reassure-i"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>No obligation</div>
+      <div class="reassure-i"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>No contracts</div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGOS -->
+<div class="logos">
+  <div class="logos-inner">
+    <span class="logos-label">Powered by</span>
+    <span class="logo-pill">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/></svg>
+      Google
+    </span>
+    <span class="logo-pill">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+      WhatsApp
+    </span>
+    <span class="logo-pill">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      Meta Ads
+    </span>
+    <span class="logo-pill">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      GoHighLevel
+    </span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stats-grid">
+    <div class="stat-row reveal">
+      <div class="stat-num">£60k–<br>£180k</div>
+      <div class="stat-text">
+        <div class="stat-label">Lost per year by the average UK driveway contractor</div>
+        <div class="stat-proof">From missed calls and slow follow-up alone. That's 2–4 missed jobs every single month.</div>
+      </div>
+    </div>
+    <div class="stat-row reveal d1">
+      <div class="stat-num">1 in 3</div>
+      <div class="stat-text">
+        <div class="stat-label">Calls go unanswered while you're on a job</div>
+        <div class="stat-proof">That customer doesn't leave a voicemail. They call the next contractor on Google.</div>
+      </div>
+    </div>
+    <div class="stat-row reveal d2">
+      <div class="stat-num">78%</div>
+      <div class="stat-text">
+        <div class="stat-label">Of jobs go to whoever responds first</div>
+        <div class="stat-proof">Not the best contractor. Not the most experienced. The fastest.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="section section-off">
+  <div class="wrap">
+    <span class="label reveal">The Problem</span>
+    <h2 class="h2 reveal">You're losing jobs you never knew about.</h2>
+    <p class="body-text reveal" style="margin-bottom:32px;">You're laying resin. Your phone rings. You can't pick up. That homeowner doesn't leave a voicemail — they scroll back to Google and call the next contractor. A £5,000 job, gone. Three or four times every single week.</p>
+
+    <div class="problem-card rc rc1">
+      <div class="pc-time">Tuesday, 11:24am</div>
+      <div class="pc-title">Missed Call — Unknown Number</div>
+      <div class="pc-body">Resin bound driveway enquiry, approximately 50 sq metres</div>
+      <span class="pc-tag tag-red">No voicemail left</span>
+    </div>
+    <div class="problem-card rc rc2">
+      <div class="pc-time">Tuesday, 11:26am</div>
+      <div class="pc-title">Customer Calls Competitor</div>
+      <div class="pc-body">Answered on first ring. Survey booked for Thursday.</div>
+      <span class="pc-tag tag-teal">Job awarded — not to you</span>
+    </div>
+    <div class="loss-box rc rc3">
+      <div class="loss-label">Your estimated monthly loss</div>
+      <div class="loss-num">£6,400</div>
+      <div class="loss-sub">From missed calls alone — before slow follow-up</div>
+    </div>
+  </div>
+</section>
+
+<!-- SYSTEM -->
+<section class="section">
+  <div class="wrap">
+    <span class="label reveal">The System</span>
+    <h2 class="h2 reveal">This isn't a website.<br>It's an <em>automated</em> sales engine.</h2>
+    <p class="body-text reveal" style="margin-bottom:48px;">Four systems running 24/7. Not a single lead slips through — whether you're on a job, in the van, or asleep.</p>
+
+    <div class="feat-block reveal">
+      <div class="feat-num">01</div>
+      <div class="feat-title">The Price Estimator Trap</div>
+      <p class="feat-body">Customers enter their driveway size and material to get an instant quote. But they can't see the price until they enter their name and phone number. You capture every lead before they see a single figure.</p>
+      <div class="mock">
+        <div class="mock-bar">
+          <div class="mock-dot" style="background:#ef4444"></div>
+          <div class="mock-dot" style="background:#f59e0b"></div>
+          <div class="mock-dot" style="background:#22c55e"></div>
+        </div>
+        <div class="mock-body">
+          <div class="mock-field done">Resin Bound Driveway <span class="mock-chk">✓</span></div>
+          <div class="mock-field done">50 sq metres <span class="mock-chk">✓</span></div>
+          <div class="mock-field done">Manchester <span class="mock-chk">✓</span></div>
+          <div class="mock-price">
+            <div class="mock-price-num">£4,800 – £6,200</div>
+            <div class="mock-price-lbl">Enter details to unlock estimate</div>
+          </div>
+          <button class="mock-btn">Unlock My Estimate →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="feat-block reveal">
+      <div class="feat-num">02</div>
+      <div class="feat-title">Standard vs. High-Ticket Jobs</div>
+      <p class="feat-body">The system automatically separates standard jobs from high-ticket opportunities and treats each differently.</p>
+      <div class="tier reveal">
+        <div class="tier-head">
+          <div class="tier-name">Standard Jobs<br><span style="font-size:14px;font-weight:400;font-style:italic;color:var(--mute);">Under £2,000</span></div>
+          <span class="tier-tag">All jobs</span>
+        </div>
+        <div class="tier-body">
+          <ul class="tier-list">
+            <li><span class="ck ck-grey">✓</span>Instant SMS within seconds of submitting</li>
+            <li><span class="ck ck-grey">✓</span>AI answers questions 24/7</li>
+            <li><span class="ck ck-grey">✓</span>Collects job photos before survey</li>
+            <li><span class="ck ck-grey">✓</span>Survey booked automatically</li>
+            <li><span class="ck ck-grey">✓</span>7-day follow-up if they go quiet</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tier featured reveal d1" style="margin-top:0;">
+        <div class="tier-head">
+          <div class="tier-name">High-Ticket Jobs<br><span style="font-size:14px;font-weight:400;font-style:italic;color:rgba(255,255,255,0.55);">£5,000+</span></div>
+          <span class="tier-tag">+ One critical step</span>
+        </div>
+        <div class="tier-body">
+          <ul class="tier-list">
+            <li><span class="ck ck-teal">✓</span>Instant SMS within seconds of submitting</li>
+            <li><span class="ck ck-teal">✓</span>AI answers questions 24/7</li>
+            <li><span class="ck ck-teal">✓</span>Collects job photos before survey</li>
+            <li><span class="ck ck-teal">✓</span>Survey booked automatically</li>
+            <li><span class="ck ck-teal">✓</span>7-day follow-up if they go quiet</li>
+          </ul>
+          <div class="tier-hi">Your phone rings within 25 seconds. You speak to a £5,000+ customer while they're still on your website — before they can think about calling anyone else.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feat-block reveal">
+      <div class="feat-num">03</div>
+      <div class="feat-title">The 7-Day Chaser</div>
+      <p class="feat-body">One text and one email sent automatically every day for 7 days until they reply or book. You stop losing jobs to slow follow-up without making a single manual call.</p>
+    </div>
+
+    <div class="feat-block reveal">
+      <div class="feat-num">04</div>
+      <div class="feat-title">Automated Google Reviews</div>
+      <p class="feat-body">Once a job is done the system follows up for a 5-star Google review. More reviews means higher ranking. Higher ranking means more leads. The system feeds itself.</p>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS — dark -->
+<section class="section section-dark">
+  <div class="wrap">
+    <span class="label label-light reveal">Why It Works</span>
+    <h2 class="h2 h2-light reveal" style="margin-bottom:32px;">The demo is live.<br>The system is <em>real.</em></h2>
+    <p class="body-text body-text-light reveal" style="margin-bottom:32px;">Every number below is a real system capability. You'll see all of it working live in the demo.</p>
+    <div class="metrics-grid reveal">
+      <div class="metric">
+        <div class="metric-num">25s</div>
+        <div class="metric-info">
+          <div class="metric-lbl">Response Time</div>
+          <div class="metric-desc">How fast your phone rings when a £5k+ job comes through the estimator</div>
+        </div>
+      </div>
+      <div class="divider-light"></div>
+      <div class="metric">
+        <div class="metric-num">7</div>
+        <div class="metric-info">
+          <div class="metric-lbl">Days Follow-Up</div>
+          <div class="metric-desc">The system chases every lead automatically — you never follow up manually again</div>
+        </div>
+      </div>
+      <div class="divider-light"></div>
+      <div class="metric">
+        <div class="metric-num">24/7</div>
+        <div class="metric-info">
+          <div class="metric-lbl">Availability</div>
+          <div class="metric-desc">Emma answers customer questions — even at 11pm on a Sunday night</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:28px;text-align:center;">
+      <a href="https://surfacex.info" class="btn-main" target="_blank" style="display:inline-flex;width:auto;">See It Working Live →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FLOWCHART — light -->
+<section class="section section-teal-pale">
+  <div class="wrap">
+    <span class="label reveal">How It Works</span>
+    <h2 class="h2 reveal" style="margin-bottom:8px;">A conveyor belt<br>for <em>new jobs.</em></h2>
+    <p class="body-text reveal" style="margin-bottom:40px;">Every step runs automatically. Every lead becomes revenue.</p>
+
+    <div class="flow reveal">
+      <div class="flow-item">
+        <div class="flow-left">
+          <div class="flow-node fn-fill">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          </div>
+          <div class="flow-connector"></div>
+        </div>
+        <div class="flow-right">
+          <div class="flow-step-n">Step 01</div>
+          <div class="flow-step-t">Traffic Lands</div>
+          <div class="flow-step-d">Homeowner finds you on Google</div>
+          <div class="flow-outcome">→ A new potential job</div>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-left">
+          <div class="flow-node fn-fill">
+            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <div class="flow-connector"></div>
+        </div>
+        <div class="flow-right">
+          <div class="flow-step-n">Step 02</div>
+          <div class="flow-step-t">Lead Captured</div>
+          <div class="flow-step-d">Estimator collects their details before they see the price</div>
+          <div class="flow-outcome">→ No lead escapes</div>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-left">
+          <div class="flow-node fn-fill">
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 010 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+          </div>
+          <div class="flow-connector"></div>
+        </div>
+        <div class="flow-right">
+          <div class="flow-step-n">Step 03</div>
+          <div class="flow-step-t">Instant Response</div>
+          <div class="flow-step-d">Emma responds in under 25 seconds. Your phone rings for £5k+ jobs</div>
+          <div class="flow-outcome">→ First to respond wins</div>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-left">
+          <div class="flow-node fn-outline">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          </div>
+          <div class="flow-connector"></div>
+        </div>
+        <div class="flow-right">
+          <div class="flow-step-n">Step 04</div>
+          <div class="flow-step-t">Survey Booked</div>
+          <div class="flow-step-d">Booked directly into your calendar automatically</div>
+          <div class="flow-outcome">→ Job on the books</div>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-left">
+          <div class="flow-node fn-outline">
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+        </div>
+        <div class="flow-right">
+          <div class="flow-step-n">Step 05</div>
+          <div class="flow-step-t">Review Collected</div>
+          <div class="flow-step-d">Automatic Google review request after every job done</div>
+          <div class="flow-outcome">→ More leads next month</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCARCITY — dark -->
+<section class="section section-dark">
+  <div class="wrap">
+    <span class="label label-light reveal">One Contractor Per Area</span>
+    <h2 class="h2 h2-light reveal">If your competitor<br>moves first — <em>they win.</em></h2>
+    <p class="body-text body-text-light reveal" style="margin-bottom:28px;">We only install this system for one driveway contractor per 25-mile radius. We don't work with your competition. But we will work with whoever contacts us first.</p>
+
+    <ul class="area-list reveal" style="margin-bottom:0;">
+      <li class="area-row"><span class="area-name">Manchester</span><span class="area-open">● Available</span></li>
+      <li class="area-row"><span class="area-name">Leeds</span><span class="area-open">● Available</span></li>
+      <li class="area-row"><span class="area-name">Birmingham</span><span class="area-open">● Available</span></li>
+      <li class="area-row"><span class="area-name">Sheffield</span><span class="area-open">● Available</span></li>
+      <li class="area-row"><span class="area-name">Liverpool</span><span class="area-open">● Available</span></li>
+    </ul>
+
+    <div class="scarcity-reason reveal">Why only one contractor per area? Because the system centralises review collection, lead handling and local market positioning for one business. Splitting it between two contractors in the same area would defeat the purpose — and we won't do that.</div>
+
+    <div style="margin-top:28px;display:flex;flex-direction:column;gap:12px;" class="reveal">
+      <a href="https://surfacex.info" class="btn-main" target="_blank">See The System Live →</a>
+      <a href="https://wa.link/rw16n1" class="btn-ghost-teal" target="_blank">Chat with Emma</a>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section">
+  <div class="wrap">
+    <span class="label reveal">Founder Rate — One Client Only</span>
+    <h2 class="h2 reveal" style="margin-bottom:8px;">Simple,<br><em>honest</em> pricing.</h2>
+    <p class="body-text reveal" style="margin-bottom:32px;">We're onboarding our first UK contractor at a discounted rate in exchange for a video testimonial. After this client, setup returns to full price.</p>
+
+    <div class="price-card reveal">
+      <div class="price-top">
+        <div class="price-badge"><span class="badge-dot"></span>1 Spot Remaining — Founder Rate</div>
+        <div class="price-amounts">
+          <div class="price-old">£3,500</div>
+          <div class="price-new">£799</div>
+        </div>
+        <div class="price-save">You save £2,701 — 77% off</div>
+        <div class="price-replaces">
+          <div class="price-replaces-lbl">This replaces</div>
+          <div class="replace-tags">
+            <span class="r-tag">Missed call handling</span>
+            <span class="r-tag">Lead follow-up</span>
+            <span class="r-tag">Review chasing</span>
+            <span class="r-tag">Estimator</span>
+            <span class="r-tag">CRM setup</span>
+            <span class="r-tag">Lead routing</span>
+          </div>
+        </div>
+        <p class="price-note">One-time setup fee. In exchange for a <strong>short video testimonial</strong> once the system is live. That is the only condition.</p>
+        <p class="price-context">Most contractors lose more than £799 from a single missed job. This pays for itself in week one.</p>
+        <div class="price-retainer">
+          <div class="retainer-n">£397<small>/mo</small></div>
+          <div class="retainer-d">Monthly retainer — AI credits, automations, maintenance, reporting. Cancel anytime.</div>
+        </div>
+      </div>
+      <div class="price-feats">
+        <div class="pf"><span class="pf-ck">✓</span>Premium mobile-first website</div>
+        <div class="pf"><span class="pf-ck">✓</span>Live price estimator + lead capture</div>
+        <div class="pf"><span class="pf-ck">✓</span>AI chat agent — 24/7 handling</div>
+        <div class="pf"><span class="pf-ck">✓</span>AI voice agent — Emma answers</div>
+        <div class="pf"><span class="pf-ck">✓</span>25-second callback for £5k+ jobs</div>
+        <div class="pf"><span class="pf-ck">✓</span>7-day automated follow-up</div>
+        <div class="pf"><span class="pf-ck">✓</span>Automated Google review requests</div>
+        <div class="pf"><span class="pf-ck">✓</span>Google Business profile setup</div>
+      </div>
+      <div class="price-bottom">
+        <div class="price-disclaimer">Full price returns to £3,500 after this client. This rate closes the moment the spot is taken.</div>
+        <a href="https://wa.link/rw16n1" class="btn-teal" target="_blank">Claim This Spot →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<div class="final-cta">
+  <div class="final-inner">
+    <h2 class="final-h reveal">One area.<br><em>One contractor.</em><br>Your move.</h2>
+    <p class="final-p reveal">The system is built. It is live. The only question is whether you or your competitor gets there first.</p>
+    <div class="final-btns reveal">
+      <a href="https://surfacex.info" class="btn-main" target="_blank">See The System Live →</a>
+      <a href="https://wa.link/rw16n1" class="btn-ghost-teal" target="_blank">Chat with Emma</a>
+    </div>
+    <div class="final-reassure reveal">
+      <div class="fr-i"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>15-min walkthrough</div>
+      <div class="fr-i"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>No obligation</div>
+      <div class="fr-i"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>No contracts</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <a href="#" class="foot-logo">Lead<span>Form</span></a>
+    <div class="foot-text">Built for UK driveway and resin contractors. One area. One contractor.</div>
+  </div>
+</footer>
+
+<!-- EMMA FLOAT -->
+<a href="https://wa.link/rw16n1" class="emma" target="_blank">
+  <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+  <span class="emma-online"></span>
+  <span>Chat with <strong>Emma</strong></span>
+</a>
+
+<script>
+  const all = document.querySelectorAll('.reveal, .rc');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.06 });
+  all.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
